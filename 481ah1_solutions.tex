@@ -1,0 +1,390 @@
+\documentclass[12pt,letterpaper]{article}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\addtolength{\hoffset}{-1in}
+\addtolength{\textwidth}{2in}
+\addtolength{\voffset}{-1.3in}
+\addtolength{\textheight}{2in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+
+\begin{document}
+\par
+{\bfseries Behrouz Barati B}
+\par
+\begin{center}
+\bfseries Homework 1
+\end{center}
+\begin{center}
+\bfseries Math.~481a, Spring 2026
+\end{center}
+\begin{center}
+%\bfseries Prepared in \LaTeX\
+\end{center}
+
+%% PROBLEM 1
+
+\textbf{Problem 1.}
+
+Let $f(x) = \sin^2(x)$, $x_0 = 0$, $x = 1^\circ = \dfrac{\pi}{180}$.
+
+Using $\sin^2(x) = \dfrac{1 - \cos(2x)}{2}$:
+\[
+f(x) = \sin^2(x), \quad
+f'(x) = \sin(2x), \quad
+f''(x) = 2\cos(2x), \quad
+f'''(x) = -4\sin(2x), \quad
+f^{(4)}(x) = -8\cos(2x).
+\]
+
+At $x_0 = 0$:
+\[
+f(0) = 0, \quad f'(0) = 0, \quad f''(0) = 2, \quad f'''(0) = 0.
+\]
+
+The third-degree Taylor polynomial:
+\[
+P_3(x) = 0 + 0 + \frac{2}{2!}\,x^2 + 0 = x^2.
+\]
+
+This confirms $\sin^2(x) \approx x^2$ is $P_3(x)$.
+
+By Taylor's Theorem, $\exists\,\xi$ between $0$ and $x$:
+\[
+R_3(x) = \frac{f^{(4)}(\xi)}{4!}\,x^4 = \frac{-8\cos(2\xi)}{24}\,x^4 = -\frac{\cos(2\xi)}{3}\,x^4.
+\]
+
+Since $|\cos(2\xi)| \le 1$:
+\[
+|R_3(x)| \le \frac{x^4}{3}.
+\]
+
+At $x = \dfrac{\pi}{180}$:
+\[
+\left|\sin^2\!\left(\frac{\pi}{180}\right) - \left(\frac{\pi}{180}\right)^2\right|
+\le \frac{1}{3}\left(\frac{\pi}{180}\right)^{\!4}
+= \frac{\pi^4}{3 \cdot 180^4}
+\]
+
+\[
+\boxed{\left|\sin^2(1^\circ) - (1^\circ)^2\right| \le \frac{\pi^4}{3 \cdot 180^4} \approx 3.09 \times 10^{-8}}
+\]
+
+
+%% PROBLEM 2
+
+\textbf{Problem 2.}
+
+\textit{Claim:} $|\sin^2(x) - \sin^2(y)| \le 2|x - y|$ for all $x, y \in \mathbb{R}$.
+
+\textit{Proof.}
+Let $f(t) = \sin^2(t)$. Then $f$ is differentiable on $\mathbb{R}$ with
+\[
+f'(t) = 2\sin(t)\cos(t).
+\]
+
+$\forall\, t \in \mathbb{R}$:
+\[
+|f'(t)| = 2|\sin t|\,|\cos t| \le 2 \cdot 1 \cdot 1 = 2.
+\]
+
+Let $x, y \in \mathbb{R}$ with $x \ne y$ (the case $x = y$ is trivial).
+By the Mean Value Theorem, $\exists\, c$ between $x$ and $y$:
+\[
+f(x) - f(y) = f'(c)(x - y).
+\]
+
+Taking absolute values:
+\[
+|\sin^2(x) - \sin^2(y)| = |f'(c)|\,|x - y| \le 2\,|x - y|. \qquad \qed
+\]
+
+
+%% PROBLEM 3
+
+\textbf{Problem 3.}
+
+$f(x) = (2 - x)^{-1}$, $x_0 = 0$.
+
+Using the hint:
+\[
+\frac{1}{2 - x} = \frac{1}{2} \cdot \frac{1}{1 - (x/2)}.
+\]
+
+The geometric series $\displaystyle\frac{1}{1 - r} = \sum_{k=0}^{\infty} r^k$ for $|r| < 1$, with $r = x/2$:
+\[
+\frac{1}{2 - x} = \frac{1}{2}\sum_{k=0}^{\infty}\left(\frac{x}{2}\right)^{\!k}
+= \sum_{k=0}^{\infty}\frac{x^k}{2^{k+1}}, \qquad |x| < 2.
+\]
+
+The $n$th Taylor polynomial:
+\[
+\boxed{P_n(x) = \sum_{k=0}^{n}\frac{x^k}{2^{k+1}}
+= \frac{1}{2} + \frac{x}{4} + \frac{x^2}{8} + \cdots + \frac{x^n}{2^{n+1}}}
+\]
+
+\textbf{Error on $[0,1]$:} The remainder is the tail of the geometric series. For $x \in [0,1]$:
+\[
+|f(x) - P_n(x)| = \sum_{k=n+1}^{\infty}\frac{x^k}{2^{k+1}}
+= \frac{1}{2}\cdot\frac{(x/2)^{n+1}}{1 - x/2}.
+\]
+
+Since $x/2 \in [0, 1/2]$ on $[0,1]$, we have $1/(1 - x/2) \le 2$, and $(x/2)^{n+1} \le (1/2)^{n+1}$:
+\[
+|f(x) - P_n(x)| \le \frac{1}{2}\cdot\frac{(1/2)^{n+1}}{1/2} = \frac{1}{2^{n+1}}.
+\]
+
+Verification at $x = 1$: $f(1) = 1$ and $P_n(1) = \sum_{k=0}^{n} 1/2^{k+1} = 1 - 1/2^{n+1}$, so $|f(1) - P_n(1)| = 1/2^{n+1}$ exactly.
+
+\textbf{Finding $n$:}
+\[
+\frac{1}{2^{n+1}} \le 10^{-6}
+\iff 2^{n+1} \ge 10^6
+\iff n + 1 \ge \log_2(10^6) = \frac{6\ln 10}{\ln 2} \approx 19.932
+\implies n + 1 \ge 20.
+\]
+
+\[
+\boxed{n = 19}
+\]
+
+Check: $1/2^{20} = 9.54 \times 10^{-7} < 10^{-6}$, \quad $1/2^{19} = 1.91 \times 10^{-6} > 10^{-6}$.
+
+
+%% PROBLEM 4
+
+\textbf{Problem 4.}
+
+$E = 133 + 0.921 - 10\pi + 6e - \dfrac{3}{62}$.
+
+\textbf{Exact value} (to 7 significant digits):
+\begin{align*}
+10\pi &= 31.41593\ldots, \quad 6e = 16.30969\ldots, \quad 3/62 = 0.04838710\ldots \\[4pt]
+E &= 133 + 0.921 - 31.41593 + 16.30969 - 0.04839 = 118.7664
+\end{align*}
+
+\textbf{(a) Four-digit rounding arithmetic.}
+
+Constants: $\mathrm{fl}_R(\pi) = 3.142$, \; $\mathrm{fl}_R(e) = 2.718$.
+
+\begin{align*}
+&\text{Step 1:}\quad 133.0 + 0.9210 = 133.921 = 0.133921 \times 10^3
+  \xrightarrow{\;\mathrm{fl}_R\;} 0.1339 \times 10^3 = 133.9 \\[2pt]
+&\text{Step 2:}\quad \mathrm{fl}_R(10\pi) = 10.00 \times 3.142 = 31.42 \\
+&\phantom{\text{Step 2:}}\quad 133.9 - 31.42 = 102.48 = 0.10248 \times 10^3
+  \xrightarrow{\;\mathrm{fl}_R\;} 0.1025 \times 10^3 = 102.5 \\[2pt]
+&\text{Step 3:}\quad \mathrm{fl}_R(6e) = 6.000 \times 2.718 = 16.308
+  \xrightarrow{\;\mathrm{fl}_R\;} 16.31 \\
+&\phantom{\text{Step 3:}}\quad 102.5 + 16.31 = 118.81 = 0.11881 \times 10^3
+  \xrightarrow{\;\mathrm{fl}_R\;} 0.1188 \times 10^3 = 118.8 \\[2pt]
+&\text{Step 4:}\quad \mathrm{fl}_R(3/62) = 0.048387\ldots
+  \xrightarrow{\;\mathrm{fl}_R\;} 0.04839 \\
+&\phantom{\text{Step 4:}}\quad 118.8 - 0.04839 = 118.752\ldots
+  \xrightarrow{\;\mathrm{fl}_R\;} 0.1188 \times 10^3 = 118.8
+\end{align*}
+
+\[
+\hat{y}_R = 118.8, \qquad
+\text{Abs.\ error} = |118.8 - 118.7664| = \boxed{0.0336}, \qquad
+\text{Rel.\ error} = \frac{0.0336}{118.7664} = \boxed{2.83 \times 10^{-4}}
+\]
+
+\textbf{(b) Four-digit chopping arithmetic.}
+
+Constants: $\mathrm{fl}_C(\pi) = 3.141$, \; $\mathrm{fl}_C(e) = 2.718$.
+
+\begin{align*}
+&\text{Step 1:}\quad 133.0 + 0.9210 = 133.921
+  \xrightarrow{\;\mathrm{fl}_C\;} 0.1339 \times 10^3 = 133.9 \\[2pt]
+&\text{Step 2:}\quad \mathrm{fl}_C(10\pi) = 10.00 \times 3.141 = 31.41 \\
+&\phantom{\text{Step 2:}}\quad 133.9 - 31.41 = 102.49 = 0.10249 \times 10^3
+  \xrightarrow{\;\mathrm{fl}_C\;} 0.1024 \times 10^3 = 102.4 \\[2pt]
+&\text{Step 3:}\quad \mathrm{fl}_C(6e) = 6.000 \times 2.718 = 16.308
+  \xrightarrow{\;\mathrm{fl}_C\;} 16.30 \\
+&\phantom{\text{Step 3:}}\quad 102.4 + 16.30 = 118.70
+  \xrightarrow{\;\mathrm{fl}_C\;} 0.1187 \times 10^3 = 118.7 \\[2pt]
+&\text{Step 4:}\quad \mathrm{fl}_C(3/62) = 0.048387\ldots
+  \xrightarrow{\;\mathrm{fl}_C\;} 0.04838 \\
+&\phantom{\text{Step 4:}}\quad 118.7 - 0.04838 = 118.652\ldots
+  \xrightarrow{\;\mathrm{fl}_C\;} 0.1186 \times 10^3 = 118.6
+\end{align*}
+
+\[
+\hat{y}_C = 118.6, \qquad
+\text{Abs.\ error} = |118.6 - 118.7664| = \boxed{0.1664}, \qquad
+\text{Rel.\ error} = \frac{0.1664}{118.7664} = \boxed{1.40 \times 10^{-3}}
+\]
+
+
+%% PROBLEM 5
+
+\textbf{Problem 5.}
+
+Approximate $e^{-5}$ using the degree-9 Taylor polynomial with three-digit chopping.
+
+True value: $e^{-5} \approx 6.74 \times 10^{-3}$.
+
+Terms $5^i / i!$ and their three-digit chopped values:
+
+\medskip
+\begin{center}
+\begin{tabular}{crrc}
+\toprule
+$i$ & $5^i/i!$ (exact) & $\mathrm{fl}_C$ & sign in (a) \\
+\midrule
+0 & $1.00000$ & $1.00$ & $+$ \\
+1 & $5.00000$ & $5.00$ & $-$ \\
+2 & $12.5000$ & $12.5$ & $+$ \\
+3 & $20.8333$ & $20.8$ & $-$ \\
+4 & $26.0417$ & $26.0$ & $+$ \\
+5 & $26.0417$ & $26.0$ & $-$ \\
+6 & $21.7014$ & $21.7$ & $+$ \\
+7 & $15.5010$ & $15.5$ & $-$ \\
+8 & $9.68810$ & $9.68$ & $+$ \\
+9 & $5.38228$ & $5.38$ & $-$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\textbf{(a)} $\displaystyle e^{-5} \approx \sum_{i=0}^{9}\frac{(-1)^i 5^i}{i!}$
+
+From left to right, applying $\mathrm{fl}_C$ after each step:
+
+\medskip
+\begin{center}
+\begin{tabular}{clrl}
+\toprule
+$i$ & Operation & Result & $\mathrm{fl}_C(S)$ \\
+\midrule
+0 & $S = +1.00$          & $1.00$  & $1.00$ \\
+1 & $S = 1.00 - 5.00$    & $-4.00$ & $-4.00$ \\
+2 & $S = -4.00 + 12.5$   & $8.50$  & $8.50$ \\
+3 & $S = 8.50 - 20.8$    & $-12.3$ & $-12.3$ \\
+4 & $S = -12.3 + 26.0$   & $13.7$  & $13.7$ \\
+5 & $S = 13.7 - 26.0$    & $-12.3$ & $-12.3$ \\
+6 & $S = -12.3 + 21.7$   & $9.40$  & $9.40$ \\
+7 & $S = 9.40 - 15.5$    & $-6.10$ & $-6.10$ \\
+8 & $S = -6.10 + 9.68$   & $3.58$  & $3.58$ \\
+9 & $S = 3.58 - 5.38$    & $-1.80$ & $-1.80$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+\boxed{e^{-5} \approx -1.80 \quad \text{(Part (a))}}
+\]
+
+\medskip
+\textbf{(b)} $\displaystyle e^{-5} = \frac{1}{e^5} \approx \left(\sum_{i=0}^{9}\frac{5^i}{i!}\right)^{\!-1}$
+
+\medskip
+\begin{center}
+\begin{tabular}{clrl}
+\toprule
+$i$ & Operation & Result & $\mathrm{fl}_C(S)$ \\
+\midrule
+0 & $S = 1.00$          & $1.00$  & $1.00$ \\
+1 & $S = 1.00 + 5.00$   & $6.00$  & $6.00$ \\
+2 & $S = 6.00 + 12.5$   & $18.5$  & $18.5$ \\
+3 & $S = 18.5 + 20.8$   & $39.3$  & $39.3$ \\
+4 & $S = 39.3 + 26.0$   & $65.3$  & $65.3$ \\
+5 & $S = 65.3 + 26.0$   & $91.3$  & $91.3$ \\
+6 & $S = 91.3 + 21.7$   & $113.$  & $113.$ \\
+7 & $S = 113. + 15.5$   & $128.5$ & $128.$ \\
+8 & $S = 128. + 9.68$   & $137.7$ & $137.$ \\
+9 & $S = 137. + 5.38$   & $142.4$ & $142.$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+\frac{1}{142} = 0.00704225\ldots \xrightarrow{\;\mathrm{fl}_C\;} 0.00704
+\]
+
+\[
+\boxed{e^{-5} \approx 0.00704 \quad \text{(Part (b))}}
+\]
+
+\medskip
+\textbf{Comparison.}
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Method & Result & Abs.\ Error & Rel.\ Error \\
+\midrule
+(a) Alternating & $-1.80$ & $1.807$ & $\approx 268$ \\
+(b) Reciprocal & $0.00704$ & $3.02 \times 10^{-4}$ & $0.0448$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Method (b) is far more accurate:} In (a), the alternating series adds and subtracts terms as large as $26.0$ to produce a result of order $10^{-3}$. Each subtraction of nearly equal numbers destroys significant digits. In (b), all terms are positive: no cancellation occurs.
+
+
+%% PROBLEM 6
+
+\textbf{Problem 6.}
+
+Recall: $\alpha_n \to \alpha$ with rate $O(1/n^p)$ if $|\alpha_n - \alpha| \le K/n^p$ for large $n$; find the largest such $p$.
+
+\medskip
+\textbf{(a)} $\displaystyle\lim_{n\to\infty} \sin^2(1/n) = 0$.
+
+$\sin(u) = u - u^3/6 + \cdots \implies \sin^2(u) = u^2 - u^4/3 + \cdots$
+
+\[
+\sin^2(1/n) = \frac{1}{n^2} - \frac{1}{3n^4} + \cdots
+\implies |\alpha_n - 0| \le K \cdot \frac{1}{n^2}
+\implies \boxed{O(1/n^2)}
+\]
+
+\textbf{(b)} $\displaystyle\lim_{n\to\infty} n^4[1 - \cos(1/n^2)] = \frac{1}{2}$.
+
+$1 - \cos(u) = u^2/2 - u^4/24 + \cdots$ \; With $u = 1/n^2$:
+
+\[
+n^4[1 - \cos(1/n^2)] = n^4\!\left[\frac{1}{2n^4} - \frac{1}{24n^8} + \cdots\right]
+= \frac{1}{2} - \frac{1}{24n^4} + \cdots
+\implies \left|\alpha_n - \frac{1}{2}\right| \le \frac{K}{n^4}
+\implies \boxed{O(1/n^4)}
+\]
+
+\textbf{(c)} $\displaystyle\lim_{n\to\infty} \sin(1/n^3) = 0$.
+
+\[
+\sin(1/n^3) = \frac{1}{n^3} - \frac{1}{6n^9} + \cdots
+\implies |\alpha_n - 0| \le \frac{K}{n^3}
+\implies \boxed{O(1/n^3)}
+\]
+
+\textbf{(d)} $\displaystyle\lim_{n\to\infty} [\sin(1/n^2)]^2 = 0$.
+
+$\sin(1/n^2) = 1/n^2 - 1/(6n^6) + \cdots$ \; Squaring:
+
+\[
+[\sin(1/n^2)]^2 = \frac{1}{n^4} - \frac{1}{3n^8} + \cdots
+\implies |\alpha_n - 0| \le \frac{K}{n^4}
+\implies \boxed{O(1/n^4)}
+\]
+
+\textbf{(e)} $\displaystyle\lim_{n\to\infty} [\ln((n+1)^2) - \ln(n^2)] = 0$.
+
+\[
+\ln((n+1)^2) - \ln(n^2) = 2\ln\!\left(1 + \frac{1}{n}\right)
+= \frac{2}{n} - \frac{1}{n^2} + \frac{2}{3n^3} - \cdots
+\implies |\alpha_n - 0| \le \frac{K}{n}
+\implies \boxed{O(1/n)}
+\]
+
+\par
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
