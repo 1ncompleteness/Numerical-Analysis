@@ -1,0 +1,370 @@
+\documentclass[12pt,letterpaper]{article}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\addtolength{\hoffset}{-1in}
+\addtolength{\textwidth}{2in}
+\addtolength{\voffset}{-1.3in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+
+\begin{document}
+\par
+{\bfseries Behrouz Barati B} \\
+https://github.com/1ncompleteness/Numerical-Analysis
+\par
+\begin{center}
+\bfseries Homework 2
+\end{center}
+\begin{center}
+\bfseries Math.~481a, Spring 2026
+\end{center}
+\begin{center}
+%\bfseries Prepared in \LaTeX\
+\end{center}
+
+%% PROBLEM 1
+
+\textbf{Problem 1.}
+
+Aitken's $\Delta^2$ Method:
+\[
+\hat{p}_n = \frac{p_{n+2}\,p_n - p_{n+1}^2}{p_{n+2} - 2p_{n+1} + p_n}
+\]
+
+\textbf{(a)} Substitute $p_n = x$, $p_{n+1} = g(x)$, $p_{n+2} = g(g(x))$:
+\[
+\boxed{G(x) = \frac{g(g(x))\cdot x - [g(x)]^2}{g(g(x)) - 2g(x) + x}}
+\]
+
+\textbf{(b)} $g(x) = x + x^2$, fixed point $p = 0$. Then $g'(x) = 1 + 2x$, so $g'(0) = 1$.
+
+$\forall\, p_0 > 0$: $g(p_0) = p_0 + p_0^2 > p_0$, so the iterates are strictly increasing. Since $|g'(0)| = 1$, the fixed point is not attracting.
+
+\[
+\boxed{\text{Diverges}}
+\]
+
+\textbf{(c)} Compute $g(g(x))$ with $g(x) = x + x^2$:
+\begin{align*}
+g(g(x)) &= g(x + x^2) = (x + x^2) + (x + x^2)^2 \\
+         &= x + x^2 + x^2 + 2x^3 + x^4 = x + 2x^2 + 2x^3 + x^4
+\end{align*}
+
+Numerator of $G(x)$:
+\begin{align*}
+g(g(x))\cdot x - [g(x)]^2 &= x(x + 2x^2 + 2x^3 + x^4) - (x + x^2)^2 \\
+&= (x^2 + 2x^3 + 2x^4 + x^5) - (x^2 + 2x^3 + x^4) = x^4 + x^5 = x^4(1 + x)
+\end{align*}
+
+Denominator of $G(x)$:
+\begin{align*}
+g(g(x)) - 2g(x) + x &= (x + 2x^2 + 2x^3 + x^4) - 2(x + x^2) + x = 2x^3 + x^4 = x^3(2 + x)
+\end{align*}
+
+\[
+\boxed{G(x) = \frac{x^4(1+x)}{x^3(2+x)} = \frac{x(1+x)}{2+x}}
+\]
+
+\textbf{(d)} Using the quotient rule on $G(x) = \dfrac{x + x^2}{x + 2}$:
+\[
+G'(x) = \frac{(1 + 2x)(x + 2) - (x + x^2)(1)}{(x + 2)^2}
+= \frac{x^2 + 4x + 2}{(x + 2)^2}
+\]
+
+\[
+G'(0) = \frac{0 + 0 + 2}{(0 + 2)^2} = \frac{2}{4} = \frac{1}{2}
+\]
+
+Since $|G'(0)| = \dfrac{1}{2} < 1$, the fixed-point iteration $x = G(x)$ converges to $p = 0$.
+
+\[
+\boxed{\text{Converges (linear, rate } \tfrac{1}{2}\text{)}}
+\]
+
+
+%% PROBLEM 2
+
+\textbf{Problem 2.}
+
+$f(x) = x^3 + x - 4$ on $[1, 4]$.
+
+$f(1) = 1 + 1 - 4 = -2 < 0$, \quad $f(4) = 64 + 4 - 4 = 64 > 0$.
+
+Bisection needs $n$ iterations where:
+\[
+\frac{b - a}{2^n} < 10^{-5}
+\implies \frac{3}{2^n} < 10^{-5}
+\implies 2^n > 3 \times 10^5
+\]
+
+$2^{18} = 262144 < 300000$, \quad $2^{19} = 524288 > 300000$.
+
+\[
+\boxed{N = 19}
+\]
+
+
+%% PROBLEM 3
+
+\textbf{Problem 3.}
+
+\textbf{(a)} The three missing lines are:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Arrow & Code \\
+\midrule
+1st (if branch) & \texttt{b = p} \\
+2nd (else branch) & \texttt{a = p} \\
+3rd (after iter) & \texttt{p = (a + b)/2} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{(b)} Iteration with $f(x) = \tan x - x$, $a = 4.3$, $b = 4.6$:
+
+$f(4.3) \approx -2.014$, \quad $f(4.6) \approx 4.260$ \quad (opposite signs).
+
+\medskip
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+iter & $a$ & $b$ & $p$ & $|f(p)|$ \\
+\midrule
+0 & 4.3000 & 4.6000 & 4.4500 & 0.7267 \\
+1 & 4.4500 & 4.6000 & 4.5250 & 0.7489 \\
+2 & 4.4500 & 4.5250 & 4.4875 & 0.1161 \\
+3 & 4.4875 & 4.5250 & 4.5063 & 0.2759 \\
+4 & 4.4875 & 4.5063 & 4.4969 & 0.0711 \\
+5 & 4.4875 & 4.4969 & 4.4922 & 0.0245 \\
+6 & 4.4922 & 4.4969 & 4.4945 & 0.0228 \\
+7 & 4.4922 & 4.4945 & 4.4934 & 0.0010 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At iteration 7: $|f(p)| = 0.0010 < 0.01$. The loop terminates.
+\[
+\boxed{7 \text{ iterations}}
+\]
+
+\textbf{(c)} The approximation is:
+\[
+\boxed{p \approx 4.4934}
+\]
+
+
+%% PROBLEM 4
+
+\textbf{Problem 4.}
+
+Target: $p^* = 7^{1/5} \approx 1.47577$. For each method $p_n = g(p_{n-1})$, compute $|g'(p^*)|$:
+
+\textbf{(a)} $g(x) = \left(\dfrac{7}{x}\right)^{1/4}$:
+\[
+g'(x) = -\frac{1}{4}\cdot\frac{(7/x)^{1/4}}{x}
+\implies g'(p^*) = -\frac{1}{4}\cdot\frac{p^*}{p^*} = -\frac{1}{4}
+\implies |g'(p^*)| = 0.25
+\]
+
+\textbf{(b)} $g(x) = x - \dfrac{x^5 - 7}{x^2}$:
+\[
+g'(x) = 1 - \frac{5x^4 \cdot x^2 - (x^5 - 7)\cdot 2x}{x^4} = 1 - 3x^2 - \frac{14}{x^3}
+\]
+\[
+g'(p^*) = 1 - 5 \cdot 7^{2/5} \approx -9.89
+\implies |g'(p^*)| \approx 9.89 > 1 \quad \text{(diverges)}
+\]
+
+\textbf{(c)} $g(x) = x - \dfrac{x^5 - 7}{5x^4}$ (Newton's method for $f(x) = x^5 - 7$):
+\[
+g'(x) = 1 - \frac{5x^4 \cdot 5x^4 - (x^5 - 7)\cdot 20x^3}{25x^8}
+= \frac{4(x^5 - 7)}{5x^5}
+\]
+\[
+g'(p^*) = \frac{4(7 - 7)}{5 \cdot 7} = 0 \quad \text{(quadratic convergence)}
+\]
+
+\textbf{(d)} $g(x) = x - \dfrac{x^5 - 7}{12}$:
+\[
+g'(x) = 1 - \frac{5x^4}{12}
+\implies g'(p^*) = 1 - \frac{5 \cdot 7^{4/5}}{12} \approx -0.976
+\implies |g'(p^*)| \approx 0.976
+\]
+
+\medskip
+Ranking (fastest to slowest):
+
+\begin{center}
+\begin{tabular}{clcc}
+\toprule
+Rank & Method & $|g'(p^*)|$ & Convergence \\
+\midrule
+1 & (c) Newton & 0 & Quadratic \\
+2 & (a) $(7/x)^{1/4}$ & $1/4$ & Linear \\
+3 & (d) $x - (x^5-7)/12$ & 0.976 & Linear \\
+4 & (b) $x - (x^5-7)/x^2$ & 9.89 & Diverges \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+\boxed{\text{(c)} \succ \text{(a)} \succ \text{(d)} \succ \text{(b)}}
+\]
+
+
+%% PROBLEM 5
+
+\textbf{Problem 5.}
+
+$3x^2 - e^x = 0 \implies x^2 = \dfrac{e^x}{3} \implies x = \dfrac{e^{x/2}}{\sqrt{3}}$.
+
+Let $g(x) = \dfrac{e^{x/2}}{\sqrt{3}}$ on $[a, b] = [0, 1]$.
+
+\textbf{Condition 1:} $g$ maps $[0,1]$ into $[0,1]$.
+
+$g$ is increasing on $[0,1]$, so:
+\[
+g(0) = \frac{1}{\sqrt{3}} \approx 0.5774, \qquad
+g(1) = \frac{e^{1/2}}{\sqrt{3}} \approx 0.9519
+\]
+
+$g([0,1]) = [0.5774,\; 0.9519] \subset [0,1]$. \checkmark
+
+\textbf{Condition 2:} $|g'(x)| < 1$ on $(0,1)$.
+\[
+g'(x) = \frac{e^{x/2}}{2\sqrt{3}}
+\implies \max_{[0,1]} |g'(x)| = g'(1) = \frac{e^{1/2}}{2\sqrt{3}} \approx 0.476 < 1 \quad \checkmark
+\]
+
+$g$ has a unique fixed point in $[0,1]$.
+
+\textbf{Iteration} from $p_0 = 0.5$:
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$n$ & $p_n$ & $|p_n - p_{n-1}|$ \\
+\midrule
+0 & 0.5000 & --- \\
+1 & 0.7413 & 0.2413 \\
+2 & 0.8364 & 0.0951 \\
+3 & 0.8771 & 0.0407 \\
+4 & 0.8952 & 0.0180 \\
+5 & 0.9033 & 0.0081 \\
+6 & 0.9070 & 0.0037 \\
+7 & 0.9086 & 0.0017 \\
+8 & 0.9094 & 0.0008 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+$|p_8 - p_7| \approx 7.57 \times 10^{-4} < 10^{-3}$.
+
+\[
+\boxed{p \approx 0.9094}
+\]
+
+
+%% PROBLEM 6
+
+\textbf{Problem 6.}
+
+Let $g(x) = \dfrac{x}{2} + \dfrac{1}{x}$ on $[1, 2]$.
+
+\textbf{Condition 1:} $g$ maps $[1, 2]$ into $[1, 2]$.
+
+$g'(x) = \dfrac{1}{2} - \dfrac{1}{x^2}$. Setting $g'(x) = 0$: $x = \sqrt{2}$.
+
+Since $g''(x) = 2/x^3 > 0$, the minimum of $g$ on $[1,2]$ is at $x = \sqrt{2}$:
+\[
+g(\sqrt{2}) = \frac{\sqrt{2}}{2} + \frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2} = \sqrt{2} \approx 1.414
+\]
+
+At the endpoints:
+\[
+g(1) = \frac{1}{2} + 1 = \frac{3}{2} = 1.5, \qquad
+g(2) = 1 + \frac{1}{2} = \frac{3}{2} = 1.5
+\]
+
+$g([1,2]) = [\sqrt{2},\; 3/2] \subset [1, 2]$. \checkmark
+
+\textbf{Condition 2:} $|g'(x)| < 1$ on $(1, 2)$.
+\[
+g'(x) = \frac{1}{2} - \frac{1}{x^2} = \frac{x^2 - 2}{2x^2}
+\]
+
+$\forall\, x \in [1, 2]$: $|x^2 - 2| \le \max(|1 - 2|, |4 - 2|) = 2$ and $2x^2 \ge 2$, so:
+\[
+|g'(x)| = \frac{|x^2 - 2|}{2x^2} \le \frac{2}{2 \cdot 1} = 1
+\]
+
+For inequality on $(1, 2)$: $|x^2 - 2| < 2$ when $x \in (1, 2)$ and $2x^2 > 2$ when $x > 1$, so $|g'(x)| < 1$ on $(1,2)$. More precisely:
+\[
+\max_{x \in [1,2]} |g'(x)| = |g'(1)| = \left|\frac{1-2}{2}\right| = \frac{1}{2} < 1 \quad \checkmark
+\]
+
+\textbf{Fixed point:} $g(p) = p \implies \dfrac{p}{2} + \dfrac{1}{p} = p \implies \dfrac{1}{p} = \dfrac{p}{2} \implies p^2 = 2 \implies p = \sqrt{2}$.
+
+$\{x_n\}$ converges to the unique fixed point $p = \sqrt{2}$ for any $x_0 \in [1, 2]$.
+
+\[
+\boxed{x_n \to \sqrt{2} \text{ for all } x_0 \in [1, 2]}
+\]
+
+
+%% PROBLEM 7
+
+\textbf{Problem 7.}
+
+Distance from $(x, x^2)$ to $(1, 0)$:
+\[
+[d(x)]^2 = (x - 1)^2 + (x^2)^2 = (x - 1)^2 + x^4
+\]
+
+Minimize by setting $\dfrac{d}{dx}[d(x)]^2 = 0$:
+\[
+2(x - 1) + 4x^3 = 0 \implies f(x) = 4x^3 + 2x - 2 = 0
+\]
+
+$f'(x) = 12x^2 + 2$.
+
+Newton's method with $x_0 = 1$:
+\[
+x_{n+1} = x_n - \frac{4x_n^3 + 2x_n - 2}{12x_n^2 + 2}
+\]
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$n$ & $x_n$ & $f(x_n)$ & $|x_n - x_{n-1}|$ \\
+\midrule
+0 & 1.000000 & 4.000000 & --- \\
+1 & 0.714286 & 0.886297 & $2.857 \times 10^{-1}$ \\
+2 & 0.605169 & 0.096859 & $1.091 \times 10^{-1}$ \\
+3 & 0.590022 & 0.001652 & $1.515 \times 10^{-2}$ \\
+4 & 0.589755 & 0.000001 & $2.674 \times 10^{-4}$ \\
+5 & 0.589755 & 0.000000 & $8.202 \times 10^{-8}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+$|x_5 - x_4| \approx 8.2 \times 10^{-8} < 10^{-4}$.
+
+$x \approx 0.5898$, \quad $y = x^2 \approx 0.3478$.
+
+\[
+\boxed{\text{Closest point: } (0.5898,\; 0.3478)}
+\]
+
+\par
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
