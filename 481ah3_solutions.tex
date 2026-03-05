@@ -1,0 +1,279 @@
+\documentclass[12pt,letterpaper]{article}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\addtolength{\hoffset}{-1in}
+\addtolength{\textwidth}{2in}
+\addtolength{\voffset}{-1.3in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+
+\begin{document}
+\par
+{\bfseries Behrouz Barati B} \\
+https://github.com/1ncompleteness/Numerical-Analysis
+\par
+\begin{center}
+\bfseries Homework 3 \\
+\bfseries Math.~481a, Spring 2026 \\
+\bfseries Prepared in \LaTeX\
+\end{center}
+
+%% PROBLEM 1
+
+\textbf{Problem 1.}
+
+\[
+\mathbf{F}(\mathbf{x})
+= \begin{bmatrix} x_1^2 - x_2 - 37 \\ x_1 - x_2^2 - 5 \\ x_1 + x_2 + x_3 - 3 \end{bmatrix}
+\]
+
+\textbf{(a)} The Jacobian:
+\[
+\mathbf{J}(\mathbf{x})
+= \begin{bmatrix}
+2x_1 & -1 & 0 \\
+1 & -2x_2 & 0 \\
+1 & 1 & 1
+\end{bmatrix}
+\]
+
+Expanding $\det(\mathbf{J})$ along column 3:
+\[
+\det(\mathbf{J}) = 1 \cdot \det\!\begin{bmatrix} 2x_1 & -1 \\ 1 & -2x_2 \end{bmatrix}
+= -4x_1 x_2 + 1
+\]
+
+By the adjugate formula $\mathbf{J}^{-1} = \dfrac{1}{\det(\mathbf{J})}\,\mathrm{adj}(\mathbf{J})$. Computing cofactors:
+\begin{align*}
+C_{11} &= -2x_2, & C_{12} &= -1, & C_{13} &= 1 + 2x_2, \\
+C_{21} &= 1, & C_{22} &= 2x_1, & C_{23} &= -(1 + 2x_1), \\
+C_{31} &= 0, & C_{32} &= 0, & C_{33} &= 1 - 4x_1 x_2.
+\end{align*}
+
+\vspace{-20pt}
+
+\[
+\boxed{\mathbf{J}(\mathbf{x})^{-1}
+= \frac{1}{1 - 4x_1 x_2}
+\begin{bmatrix}
+-2x_2 & 1 & 0 \\[3pt]
+-1 & 2x_1 & 0 \\[3pt]
+1 + 2x_2 & -(1 + 2x_1) & 1 - 4x_1 x_2
+\end{bmatrix}}
+\]
+
+Newton's iteration $\mathbf{G}(\mathbf{x}) = \mathbf{x} - \mathbf{J}(\mathbf{x})^{-1}\mathbf{F}(\mathbf{x})$:
+
+Let $d = 1 - 4x_1 x_2$. Then:
+\begin{align*}
+G_1(\mathbf{x}) &= x_1 - \frac{-2x_2(x_1^2 - x_2 - 37) + 1 \cdot (x_1 - x_2^2 - 5)}{d} \\[6pt]
+G_2(\mathbf{x}) &= x_2 - \frac{-1 \cdot (x_1^2 - x_2 - 37) + 2x_1(x_1 - x_2^2 - 5)}{d} \\[6pt]
+G_3(\mathbf{x}) &= x_3 - \frac{(1+2x_2)(x_1^2 - x_2 - 37) - (1+2x_1)(x_1 - x_2^2 - 5)}{d} - (x_1 + x_2 + x_3 - 3)
+\end{align*}
+
+Simplifying numerators:
+\[
+\boxed{\mathbf{G}(\mathbf{x}) = \frac{1}{4x_1 x_2 - 1}
+\begin{bmatrix}
+2x_1^2 x_2 + x_2^2 + 74x_2 - 5 \\[3pt]
+x_1^2 + 2x_1 x_2^2 - 10x_1 + 37 \\[3pt]
+-2x_1^2 x_2 - x_1^2 - 2x_1 x_2^2 + 12x_1 x_2 + 10x_1 - x_2^2 - 74x_2 - 35
+\end{bmatrix}}
+\]
+
+\textbf{(b)} With $\mathbf{x}^{(0)} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$:
+
+At $\mathbf{x}^{(0)}$: $\;d = 1$, $\;\mathbf{F}(\mathbf{x}^{(0)}) = \begin{bmatrix} -37 \\ -5 \\ -3 \end{bmatrix}$.
+\vspace{-10pt}
+\[
+\mathbf{J}^{-1}(\mathbf{x}^{(0)}) = \begin{bmatrix} 0 & 1 & 0 \\ -1 & 0 & 0 \\ 1 & -1 & 1 \end{bmatrix}, \qquad
+\mathbf{J}^{-1}\mathbf{F} = \begin{bmatrix} -5 \\ 37 \\ -35 \end{bmatrix}
+\]
+\[
+\boxed{\mathbf{x}^{(1)} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} - \begin{bmatrix} -5 \\ 37 \\ -35 \end{bmatrix} = \begin{bmatrix} 5 \\ -37 \\ 35 \end{bmatrix}}
+\]
+
+At $\mathbf{x}^{(1)} = \begin{bmatrix} 5 \\ -37 \\ 35 \end{bmatrix}$: $\;\mathbf{F}(\mathbf{x}^{(1)}) = \begin{bmatrix} 25 \\ -1369 \\ 0 \end{bmatrix}$, $\;d = 1 - 4(5)(-37) = 741$.
+\[
+\mathbf{J}^{-1}\mathbf{F} = \frac{1}{741}\begin{bmatrix} 74 & 1 & 0 \\ -1 & 10 & 0 \\ -73 & -11 & 741 \end{bmatrix}\begin{bmatrix} 25 \\ -1369 \\ 0 \end{bmatrix}
+= \frac{1}{741}\begin{bmatrix} 481 \\ -13715 \\ 13234 \end{bmatrix}
+\]
+\[
+\boxed{\mathbf{x}^{(2)} = \begin{bmatrix} 248/57 \\ -1054/57 \\ 977/57 \end{bmatrix} \approx \begin{bmatrix} 4.3509 \\ -18.4912 \\ 17.1404 \end{bmatrix}}
+\]
+
+Check: $x_1^{(2)} + x_2^{(2)} + x_3^{(2)} = \dfrac{248 - 1054 + 977}{57} = \dfrac{171}{57} = 3$.
+
+
+%% PROBLEM 2
+
+\textbf{Problem 2.}
+
+$f(x) = ax - b$, \; $f'(x) = a \ne 0$.
+
+Newton's method:
+\[
+p_{n+1} = p_n - \frac{f(p_n)}{f'(p_n)} = p_n - \frac{ap_n - b}{a} = p_n - p_n + \frac{b}{a} = \frac{b}{a}
+\]
+
+\[
+\boxed{p_1 = \frac{b}{a}}
+\]
+
+$p_1 = b/a$ is the exact root of $ax = b$, independent of $p_0$.
+
+Since $f(b/a) = a(b/a) - b = 0$:
+\[
+p_2 = p_1 - \frac{f(p_1)}{f'(p_1)} = \frac{b}{a} - \frac{0}{a} = \frac{b}{a}
+\]
+
+\[
+\boxed{p_n = \frac{b}{a} \quad \forall\, n \ge 1}
+\]
+
+Newton's method converges in exactly one iteration for any linear equation. The tangent-line approximation used in Newton's method equals the function itself when $f$ is linear.
+
+
+%% PROBLEM 3
+
+\textbf{Problem 3.}
+
+\textit{Claim:} $\mathbf{F} = (f_1, \ldots, f_n) : D \to \mathbb{R}^n$ is continuous at $\mathbf{x}_0 \in D$ if and only if $\forall\, \varepsilon > 0$, $\exists\, \delta > 0$ such that $\mathbf{x} \in D$ and $\|\mathbf{x} - \mathbf{x}_0\|_\infty < \delta \implies \|\mathbf{F}(\mathbf{x}) - \mathbf{F}(\mathbf{x}_0)\|_\infty < \varepsilon$.
+
+\textit{Key identity.}
+\[
+\|\mathbf{F}(\mathbf{x}) - \mathbf{F}(\mathbf{x}_0)\|_\infty = \max_{1 \le i \le n} |f_i(\mathbf{x}) - f_i(\mathbf{x}_0)|
+\]
+
+\textit{Proof:}
+
+$(\Longrightarrow)$ Suppose $\mathbf{F}$ is continuous at $\mathbf{x}_0$. By Definition~10.3,
+\[
+\lim_{\mathbf{x} \to \mathbf{x}_0} f_i(\mathbf{x}) = f_i(\mathbf{x}_0), \quad i = 1, 2, \ldots, n.
+\]
+
+Let $\varepsilon > 0$. $\forall\, i$, $\exists\, \delta_i > 0$ such that $\mathbf{x} \in D$ and $\|\mathbf{x} - \mathbf{x}_0\|_\infty < \delta_i \implies |f_i(\mathbf{x}) - f_i(\mathbf{x}_0)| < \varepsilon$.
+
+Set $\delta = \min(\delta_1, \ldots, \delta_n) > 0$. Then $\|\mathbf{x} - \mathbf{x}_0\|_\infty < \delta$ implies:
+\[
+|f_i(\mathbf{x}) - f_i(\mathbf{x}_0)| < \varepsilon \quad \forall\, i
+\implies \max_{1 \le i \le n} |f_i(\mathbf{x}) - f_i(\mathbf{x}_0)| < \varepsilon
+\implies \|\mathbf{F}(\mathbf{x}) - \mathbf{F}(\mathbf{x}_0)\|_\infty < \varepsilon.
+\]
+
+$(\Longleftarrow)$ Suppose $\forall\, \varepsilon > 0$, $\exists\, \delta > 0$: $\|\mathbf{x} - \mathbf{x}_0\|_\infty < \delta \implies \|\mathbf{F}(\mathbf{x}) - \mathbf{F}(\mathbf{x}_0)\|_\infty < \varepsilon$.
+
+Fix any $i \in \{1, \ldots, n\}$. Then:
+\[
+|f_i(\mathbf{x}) - f_i(\mathbf{x}_0)| \le \max_{1 \le j \le n} |f_j(\mathbf{x}) - f_j(\mathbf{x}_0)| = \|\mathbf{F}(\mathbf{x}) - \mathbf{F}(\mathbf{x}_0)\|_\infty < \varepsilon.
+\]
+
+So $\lim_{\mathbf{x} \to \mathbf{x}_0} f_i(\mathbf{x}) = f_i(\mathbf{x}_0)$ for each $i = 1, \ldots, n$. By Definition~10.3, $\lim_{\mathbf{x} \to \mathbf{x}_0} \mathbf{F}(\mathbf{x}) = \mathbf{F}(\mathbf{x}_0)$, so $\mathbf{F}$ is continuous at $\mathbf{x}_0$. \qed
+
+
+%% PROBLEM 4
+
+\textbf{Problem 4.}
+
+\[
+g_1(x_1, x_2) = \frac{x_1^2 + x_2^2 + 6}{8}, \qquad
+g_2(x_1, x_2) = \frac{x_1 x_2^2 + x_1 + 6}{8}
+\]
+
+\textbf{(a)} We verify the three conditions of Theorem~10.6 on $D = \{(x_1, x_2) : 0 \le x_1 \le \tfrac{4}{3},\; 0 \le x_2 \le \tfrac{4}{3}\}$.
+
+\textbf{Condition 1:} $\mathbf{G}$ maps $D$ into $D$.
+
+$\forall\, (x_1, x_2) \in D$: all terms are non-negative, so $g_1, g_2 \ge 6/8 = 3/4 \ge 0$.
+
+$g_1$ is increasing in both $x_1$ and $x_2$ on $D$, so:
+\[
+g_1(x_1, x_2) \le g_1\!\left(\tfrac{4}{3}, \tfrac{4}{3}\right) = \frac{(4/3)^2 + (4/3)^2 + 6}{8} = \frac{86/9}{8} = \frac{43}{36} \approx 1.194 \le \frac{4}{3} \quad \]
+
+$g_2$ is increasing in both variables on $D$ (since $x_1, x_2 \ge 0$), so:
+\[
+g_2(x_1, x_2) \le g_2\!\left(\tfrac{4}{3}, \tfrac{4}{3}\right) = \frac{(4/3)(4/3)^2 + 4/3 + 6}{8} = \frac{262/27}{8} = \frac{131}{108} \approx 1.213 \le \frac{4}{3} \quad \]
+
+\textbf{Condition 2:} Continuous partial derivatives.
+
+$g_1, g_2$ are polynomials, so all partial derivatives are continuous on $D$. 
+
+\textbf{Condition 3:} $\exists\, K < 1$ with $\left|\dfrac{\partial g_i}{\partial x_j}\right| \le \dfrac{K}{n} = \dfrac{K}{2}$ on $D$.
+
+Partial derivatives:
+\[
+\frac{\partial g_1}{\partial x_1} = \frac{x_1}{4}, \quad
+\frac{\partial g_1}{\partial x_2} = \frac{x_2}{4}, \quad
+\frac{\partial g_2}{\partial x_1} = \frac{x_2^2 + 1}{8}, \quad
+\frac{\partial g_2}{\partial x_2} = \frac{x_1 x_2}{4}
+\]
+
+Bounds on $D$:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Partial derivative & Maximum on $D$ & Value \\
+\midrule
+$|\partial g_1/\partial x_1|$ & at $x_1 = 4/3$ & $1/3$ \\
+$|\partial g_1/\partial x_2|$ & at $x_2 = 4/3$ & $1/3$ \\
+$|\partial g_2/\partial x_1|$ & at $x_2 = 4/3$ & $25/72$ \\
+$|\partial g_2/\partial x_2|$ & at $x_1 = x_2 = 4/3$ & $4/9$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The largest bound is $4/9$. Setting $K/2 = 4/9$ gives $K = 8/9 < 1$.
+
+Verification: $1/3 \le 4/9$, \; $25/72 \le 4/9 = 32/72$, \; $4/9 \le 4/9$.
+
+\[
+\boxed{K = \frac{8}{9} < 1 \implies \text{unique fixed point in } D, \text{ iteration converges.}}
+\]
+
+
+\textbf{(b)} Fixed-point iteration with $\mathbf{x}^{(0)} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$, stopping when $\|\mathbf{x}^{(k)} - \mathbf{x}^{(k-1)}\|_\infty < 10^{-5}$:
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$k$ & $x_1^{(k)}$ & $x_2^{(k)}$ & $\|\mathbf{x}^{(k)} - \mathbf{x}^{(k-1)}\|_\infty$ \\
+\midrule
+0 & $0.00000000$ & $0.00000000$ & --- \\
+1 & $0.75000000$ & $0.75000000$ & $7.50 \times 10^{-1}$ \\
+2 & $0.89062500$ & $0.89648438$ & $1.46 \times 10^{-1}$ \\
+3 & $0.94961214$ & $0.95080078$ & $5.90 \times 10^{-2}$ \\
+4 & $0.97572317$ & $0.97601032$ & $2.61 \times 10^{-2}$ \\
+5 & $0.98807898$ & $0.98814916$ & $1.24 \times 10^{-2}$ \\
+6 & $0.99409235$ & $0.99410970$ & $6.01 \times 10^{-3}$ \\
+7 & $0.99705921$ & $0.99706352$ & $2.97 \times 10^{-3}$ \\
+8 & $0.99853284$ & $0.99853392$ & $1.47 \times 10^{-3}$ \\
+9 & $0.99926723$ & $0.99926750$ & $7.34 \times 10^{-4}$ \\
+10 & $0.99963382$ & $0.99963388$ & $3.67 \times 10^{-4}$ \\
+11 & $0.99981696$ & $0.99981697$ & $1.83 \times 10^{-4}$ \\
+12 & $0.99990849$ & $0.99990850$ & $9.15 \times 10^{-5}$ \\
+13 & $0.99995425$ & $0.99995425$ & $4.58 \times 10^{-5}$ \\
+14 & $0.99997713$ & $0.99997713$ & $2.29 \times 10^{-5}$ \\
+15 & $0.99998856$ & $0.99998856$ & $1.14 \times 10^{-5}$ \\
+16 & $0.99999428$ & $0.99999428$ & $5.72 \times 10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At $k = 16$: $\|\mathbf{x}^{(16)} - \mathbf{x}^{(15)}\|_\infty \approx 5.72 \times 10^{-6} < 10^{-5}$.
+
+\[
+\boxed{\mathbf{x} \approx \begin{bmatrix} 0.99999 \\ 0.99999 \end{bmatrix} \quad \text{(16 iterations, fixed point } \mathbf{p} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\text{)}}
+\]
+
+Check: $g_1(1,1) = (1+1+6)/8 = 1$, \; $g_2(1,1) = (1+1+6)/8 = 1$.
+
+\par
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
