@@ -1,0 +1,275 @@
+\documentclass[9pt,letterpaper]{extarticle}
+\usepackage[margin=0.35in,landscape=false]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\setlength{\columnsep}{12pt}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{1pt}
+\setlength{\belowdisplayshortskip}{1pt}
+\pagestyle{empty}
+
+\titleformat{\section}{\bfseries\small}{}{0pt}{}
+\titlespacing*{\section}{0pt}{4pt}{1pt}
+\titleformat{\subsection}{\bfseries\footnotesize}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{2pt}{0pt}
+
+\newcommand{\head}[1]{\smash{\colorbox{black!12}{\parbox{\dimexpr\columnwidth-2pt}{\bfseries\small #1}}}\par\vspace{1pt}}
+\newcommand{\sub}[1]{\textbf{\footnotesize #1}\par}
+
+\begin{document}
+\begin{center}
+{\bfseries\normalsize Math 481a — Test 3 Cheatsheet}\;\;\;
+{\footnotesize §4.2 Richardson \textbullet\ §4.3 Numerical Integration \textbullet\ §4.7 Gaussian Quadrature \textbullet\ §5.1--5.4 IVPs}\;\;\;
+{\scriptsize (Burden \& Faires 10e)}
+\end{center}
+\vspace{-6pt}
+
+\begin{multicols*}{2}
+\footnotesize
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§4.2 Richardson's Extrapolation}
+
+\sub{General principle.} If $N(h) = M + K_1 h + K_2 h^2 + \cdots$ approximates $M$ with error $O(h)$, then combining $N(h)$ and $N(h/2)$ to cancel the leading $K_1 h$ gives $O(h^2)$:
+\[
+N_2(h) = N(h/2) + \bigl[N(h/2) - N(h)\bigr].
+\]
+
+\sub{Even-power expansion (e.g.\ centered differences, comp.\ Trap.).} If $N(h) = M + K_1 h^2 + K_2 h^4 + \cdots$:
+\[
+N_j(h) = N_{j-1}(h/2) + \frac{N_{j-1}(h/2) - N_{j-1}(h)}{4^{\,j-1} - 1},\quad j\ge 2.
+\]
+Each step kills the next $h^{2(j-1)}$ term: $N_j(h) - M = O(h^{2j})$.
+
+\sub{Romberg integration.} Apply to composite Trapezoidal $T_n$:
+\[
+R_{k,1} = T_{2^{k-1}},\qquad R_{k,j}=R_{k,j-1}+\tfrac{R_{k,j-1}-R_{k-1,j-1}}{4^{\,j-1}-1}.
+\]
+$R_{k,2}$ is Simpson's, $R_{k,3}$ is Boole's. Triangular table; cost $\approx 2^{k-1}+1$ function values.
+
+\sub{Three-pt midpoint Richardson example.}
+$\phi(h)=\frac{f(x_0+h)-f(x_0-h)}{2h}=f'(x_0)+\sum K_i h^{2i}$ $\Rightarrow$
+$f'(x_0)\approx \tfrac{4\phi(h/2)-\phi(h)}{3}$, error $O(h^4)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§4.3 Numerical Integration}
+
+\sub{Definition 4.1 (degree of precision).} Largest integer $n$ with $\int_a^b x^k\,dx = \sum_i a_i x_i^k$ for $k=0,\ldots,n$. Equivalently $E(x^k)=0$ for $k\le n$ and $E(x^{n+1})\ne 0$. By linearity of $E$: deg.\ precision $\ge n$ $\iff$ formula exact for all $\mathcal P_n$.
+
+\sub{Trapezoidal rule} ($n=1$, $h=b-a$, deg.\ prec.\ 1):
+\[
+\int_a^b\! f\,dx = \tfrac{h}{2}[f(a)+f(b)] - \tfrac{h^3}{12}f''(\xi),\;\xi\in(a,b).
+\]
+
+\sub{Simpson's rule} ($n=2$, $h=\tfrac{b-a}{2}$, $x_1=\tfrac{a+b}{2}$, deg.\ prec.\ 3):
+\[
+\int_a^b\! f\,dx = \tfrac{h}{3}[f(a)+4f(x_1)+f(b)] - \tfrac{h^5}{90}f^{(4)}(\xi).
+\]
+
+\sub{Simpson's 3/8 rule} ($n=3$, $h=\tfrac{b-a}{3}$, deg.\ prec.\ 3):
+\[
+\int_a^b\! f\,dx = \tfrac{3h}{8}[f(x_0)+3f(x_1)+3f(x_2)+f(x_3)] - \tfrac{3h^5}{80}f^{(4)}(\xi).
+\]
+
+\sub{Composite Trapezoidal} ($h=(b-a)/n$, $x_j=a+jh$):
+\[
+\int_a^b\! f = \tfrac{h}{2}\!\Bigl[f(a)+2\!\sum_{j=1}^{n-1}\! f(x_j)+f(b)\Bigr] - \tfrac{(b-a)h^2}{12}f''(\mu).
+\]
+
+\sub{Composite Simpson's} ($n$ even, $h=(b-a)/n$):
+\[
+\int_a^b\! f = \tfrac{h}{3}\!\Bigl[f(a)+2\!\!\sum_{\text{even}}\! f(x_j)+4\!\!\sum_{\text{odd}}\! f(x_j)+f(b)\Bigr]
+- \tfrac{(b-a)h^4}{180}f^{(4)}(\mu).
+\]
+
+\sub{Composite Midpoint} ($n$ even, $h=(b-a)/(n+2)$, $x_j=a+(j+1)h$):
+\[
+\int_a^b\! f = 2h\!\sum_{j=0}^{n/2}\! f(x_{2j+1}) + \tfrac{(b-a)h^2}{6}f''(\mu).
+\]
+
+\sub{Stability.} All these are \emph{stable}: round-off in nodes amplifies by $\le \sum |a_i|=b-a$ (no cancellation).
+
+\sub{Method of undetermined coefficients.} For $\int_a^b f\,dx \approx \sum a_i f(x_i)$ with prescribed nodes: impose exactness on $1,x,x^2,\ldots$ to get linear system for $a_i$; one extra monomial determines the error constant $k\,f^{(p)}(\xi)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§4.7 Gaussian Quadrature}
+
+\sub{Idea.} Choose both nodes $x_i$ and weights $c_i$ ($n$ each $\Rightarrow$ $2n$ free parameters) $\Rightarrow$ deg.\ precision $2n-1$ (max possible).
+
+\sub{Theorem 4.7 (nodes \& weights on $[-1,1]$).} Nodes $x_1,\ldots,x_n$ are roots of $n$th Legendre polynomial $P_n$; weights
+\[
+c_i = \int_{-1}^{1} \prod_{\substack{j=1\\j\ne i}}^{n} \frac{x-x_j}{x_i-x_j}\,dx > 0.
+\]
+
+\sub{Legendre polynomials} (orthogonal on $[-1,1]$, monic):
+$P_0=1$, $P_1=x$, $P_2=x^2-\tfrac13$, $P_3=x^3-\tfrac35 x$, $P_4=x^4-\tfrac67 x^2+\tfrac{3}{35}$.
+
+\sub{Table 4.12 (nodes $r_{n,i}$, weights $c_{n,i}$).}\par\vspace{-2pt}
+{\scriptsize
+\begin{tabular}{c|rr}
+\toprule
+$n$ & roots $\pm r_{n,i}$ & coefficients $c_{n,i}$ \\
+\midrule
+2 & $\pm 0.5773502692$ & $1.0000000000$ \\
+\midrule
+3 & $\pm 0.7745966692$ & $0.5555555556$ \\
+  & $0.0000000000$ & $0.8888888889$ \\
+\midrule
+4 & $\pm 0.8611363116$ & $0.3478548451$ \\
+  & $\pm 0.3399810436$ & $0.6521451549$ \\
+\midrule
+5 & $\pm 0.9061798459$ & $0.2369268850$ \\
+  & $\pm 0.5384693101$ & $0.4786286705$ \\
+  & $\;\;\,0.0000000000$ & $0.5688888889$ \\
+\bottomrule
+\end{tabular}}
+
+\sub{Arbitrary $[a,b]$: change of variable.} $x = \tfrac{(b-a)t + (a+b)}{2}$, $dx = \tfrac{b-a}{2}dt$:
+\[
+\int_a^b f(x)\,dx = \tfrac{b-a}{2}\!\int_{-1}^{1}\! f\!\left(\tfrac{(b-a)t+(a+b)}{2}\right)dt
+\approx \tfrac{b-a}{2}\sum_{i=1}^n c_i\,f\!\left(\tfrac{(b-a)x_i+(a+b)}{2}\right).
+\]
+
+\sub{Error.} Exact for polys of degree $\le 2n-1$. For $f\in C^{2n}[a,b]$:
+\[
+E_n[f] = \tfrac{(b-a)^{2n+1}(n!)^4}{(2n+1)\,[(2n)!]^3}\,f^{(2n)}(\xi),\;\xi\in(a,b).
+\]
+Generally far more accurate than Newton-Cotes for the same number of evaluations.
+
+\columnbreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§5.1 Theory of Initial-Value Problems}
+
+\sub{IVP.} $y'(t)=f(t,y)$, $a\le t\le b$, $y(a)=\alpha$.
+
+\sub{Definition (Lipschitz in $y$).} $f$ satisfies a Lipschitz condition on $D\subset\mathbb R^2$ in $y$ if $\exists L>0$:
+\[
+|f(t,y_1)-f(t,y_2)| \le L\,|y_1-y_2|,\quad \forall (t,y_1),(t,y_2)\in D.
+\]
+
+\sub{Theorem 5.3 (sufficient).} If $D\subset\mathbb R^2$ is convex and $\bigl|\partial f/\partial y\bigr|\le L$ on $D$, then $f$ is Lipschitz in $y$ on $D$ with constant $L$. (Sufficient, not necessary.)
+
+\sub{Theorem 5.4 (Existence \& uniqueness).} If $D=\{(t,y): a\le t\le b,\; y\in\mathbb R\}$, $f$ is continuous on $D$, and $f$ is Lipschitz in $y$ on $D$, then the IVP has a unique solution $y(t)$ on $[a,b]$.
+
+\sub{Definition (well-posed).} The IVP is well-posed if (i) it has a unique solution; (ii) $\forall\varepsilon>0$, $\exists k(\varepsilon)>0$ s.t.\ for $|\varepsilon_0|<\varepsilon$ and any $\delta(t)$ continuous with $|\delta(t)|<\varepsilon$ on $[a,b]$, the perturbed problem $z'=f(t,z)+\delta(t)$, $z(a)=\alpha+\varepsilon_0$ has a unique $z(t)$ with $|z(t)-y(t)|<k(\varepsilon)\varepsilon$.
+
+\sub{Theorem 5.6.} If $f$ is continuous and Lipschitz in $y$ on $D=\{a\le t\le b, y\in\mathbb R\}$ $\Rightarrow$ IVP is well-posed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§5.2 Euler's Method}
+
+\sub{Mesh and step.} $t_i=a+ih$, $i=0,\ldots,N$, $h=(b-a)/N$.
+
+\sub{Formula} (Taylor order 1):
+\[
+w_0=\alpha,\quad w_{i+1}=w_i + h\,f(t_i,w_i).
+\]
+Local truncation error $\tau_{i+1}(h)=\tfrac{h}{2} y''(\xi_i)=O(h)$.
+
+\sub{Theorem 5.9 (error bound).} If $f$ Lipschitz with constant $L$ on $D=\{a\le t\le b, y\in\mathbb R\}$ and $|y''(t)|\le M$ on $[a,b]$, then for the exact solution $y$:
+\[
+|y(t_i)-w_i| \le \frac{hM}{2L}\!\left[e^{L(t_i-a)} - 1\right],\quad i=0,\ldots,N.
+\]
+
+\sub{Theorem 5.10 (with round-off).} If $|\delta_i|\le \delta$ then
+\[
+|y(t_i)-u_i| \le \tfrac{1}{L}\!\left(\tfrac{hM}{2}+\tfrac{\delta}{h}\right)\!\!\left[e^{L(t_i-a)}-1\right] + |\delta_0|e^{L(t_i-a)}.
+\]
+Optimal step: $h^* = \sqrt{2\delta/M}$ (minimizes $hM/2 + \delta/h$).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§5.3 Higher-Order Taylor Methods}
+
+\sub{Order $n$ method.}
+\[
+w_0=\alpha,\;\; w_{i+1}=w_i + h\,T^{(n)}(t_i,w_i),
+\]
+\[
+T^{(n)}(t,w)=f(t,w)+\tfrac{h}{2}f'(t,w)+\cdots+\tfrac{h^{n-1}}{n!}f^{(n-1)}(t,w),
+\]
+where $f^{(k-1)}(t,y(t))=\tfrac{d^k y}{dt^k}$ along the solution curve. Local truncation error $\tau_{i+1}(h)=\tfrac{h^n}{(n+1)!}y^{(n+1)}(\xi)=O(h^n)$.
+
+\sub{Computing $f', f''$, etc.} Differentiate $y'=f(t,y)$ via chain rule:
+\[
+f' = f_t + f_y\!\cdot\! f,\;\;\; f'' = f_{tt} + 2 f_{ty} f + f_{yy} f^2 + f_y(f_t + f_y f).
+\]
+
+\sub{Drawback.} Requires symbolic derivatives of $f$ — Runge-Kutta replaces these with extra $f$-evaluations.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{§5.4 Runge-Kutta Methods}
+
+\sub{Midpoint method (RK2)} \quad LTE $O(h^2)$:
+\[
+w_{i+1}=w_i + h\,f\!\left(t_i+\tfrac{h}{2},\; w_i+\tfrac{h}{2} f(t_i,w_i)\right).
+\]
+
+\sub{Modified Euler / Heun-trapezoid (RK2)} \quad LTE $O(h^2)$:
+\[
+w_{i+1}=w_i + \tfrac{h}{2}\!\left[f(t_i,w_i)+f\bigl(t_{i+1}, w_i+h f(t_i,w_i)\bigr)\right].
+\]
+
+\sub{Heun's method (RK3)} \quad LTE $O(h^3)$:
+\[
+w_{i+1}=w_i + \tfrac{h}{4}\!\left[f(t_i,w_i)+3 f\!\left(t_i+\tfrac{2h}{3},\, w_i+\tfrac{2h}{3} f(t_i+\tfrac{h}{3}, w_i+\tfrac{h}{3} f(t_i,w_i))\right)\right].
+\]
+
+\sub{Runge-Kutta order 4 (RK4)} \quad LTE $O(h^4)$ (most-used):
+\begin{align*}
+k_1 &= h\,f(t_i,\,w_i),\\
+k_2 &= h\,f\!\left(t_i+\tfrac{h}{2},\, w_i+\tfrac{k_1}{2}\right),\\
+k_3 &= h\,f\!\left(t_i+\tfrac{h}{2},\, w_i+\tfrac{k_2}{2}\right),\\
+k_4 &= h\,f\!\left(t_{i+1},\, w_i+k_3\right),\\
+w_{i+1} &= w_i + \tfrac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4).
+\end{align*}
+
+\sub{Cost vs.\ order (Butcher).}\par\vspace{-2pt}
+{\scriptsize
+\begin{tabular}{lcccc}
+\toprule
+evals/step $n$ & 2 & 3 & 4 & $\ge 5$ \\
+\midrule
+best LTE & $O(h^2)$ & $O(h^3)$ & $O(h^4)$ & $\le O(h^{n-1})$ \\
+\bottomrule
+\end{tabular}}\\
+RK4 dominates RK2 with $h$ vs.\ $h/2$ and Euler with $h$ vs.\ $h/4$ for the same total $f$-cost.
+
+\sub{Global error.} If LTE = $O(h^p)$ and $f$ is Lipschitz, global error $|y(t_i)-w_i|=O(h^p)$ as well (one order is lost from local→global only if you confuse the two — for one-step methods of order $p$, both LTE and global err are $O(h^p)$).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\head{Quick reference: error orders}
+
+{\scriptsize
+\begin{tabular}{lll}
+\toprule
+Method & Error & Cost/step \\
+\midrule
+Trapezoidal (single) & $O(h^3)$ & 2 evals \\
+Simpson's (single) & $O(h^5)$ & 3 evals \\
+Comp.\ Trapezoidal & $O(h^2)$ & $n+1$ \\
+Comp.\ Simpson & $O(h^4)$ & $n+1$ \\
+Comp.\ Midpoint & $O(h^2)$ & $n/2{+}1$ \\
+Romberg ($k$ levels) & $O(h^{2k})$ & $2^{k-1}{+}1$ \\
+Gauss-Legendre $n$-pt & $O(h^{2n})$, deg.\ $2n{-}1$ & $n$ \\
+\midrule
+Euler & $O(h)$ & 1 \\
+Taylor order $n$ & $O(h^n)$ & 1 (+ derivs) \\
+RK2 (midpt./mod.\ Euler) & $O(h^2)$ & 2 \\
+RK3 (Heun) & $O(h^3)$ & 3 \\
+RK4 & $O(h^4)$ & 4 \\
+\bottomrule
+\end{tabular}}
+
+\end{multicols*}
+\end{document}
